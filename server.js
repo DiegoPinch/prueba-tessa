@@ -36,7 +36,7 @@ app.post('/flores', (req, res) => {
             });
         }
 
-        const sql = 'INSERT INTO VariedadesFlor (nombre, color, precio_tallo) VALUES (?, ?, ?)';
+        const sql = 'INSERT INTO VariedadFlor (nombre, color, precio_tallo) VALUES (?, ?, ?)';
         db.run(sql, [nombre, color, precio], function(err) {
             if (err) {
                 console.error('Error inserting data:', err.message);
@@ -70,7 +70,7 @@ app.get('/flores', async (req, res) => {
 
         const informacionExterna = await response.json();
 
-        db.all("SELECT * FROM VariedadesFlor", [], (err, rows) => {
+        db.all("SELECT * FROM VariedadFlor", [], (err, rows) => {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ error: 'Error al obtener datos de la base de datos' });
