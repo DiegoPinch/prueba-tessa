@@ -1,8 +1,8 @@
 services:
   api:
-    build:
-      container_name: tessa_api
-      ports:
-        - "3000:3000"
-      environment:
-        - PORT=3000
+    build: .
+    container_name: tessa-api
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
