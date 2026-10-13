@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teesa Corporation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            padding: 24px;
+            background-color: #f4f4f4;
+            max-width: 900px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        #flores {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            padding: 0;
+            list-style: none;
+        }
+
+        #flores li {
+            padding: 16px;
+            background: #fff;
+            border-radius: 8px;
+        }
+
+        #mensaje {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Variedades de Flor</h1>
+    <p id="mensaje" role="status">Cargando variedades...</p>
+    <ul id="flores"></ul>
+
+    <script>
+        async function cargarFlores() {
+            const mensaje = document.getElementById('mensaje');
+            const lista = document.getElementById('flores');
+
+            try {
+                const response = await fetch('/flores');
+                if (!response.ok) {
+                    throw new Error(`Error al obtener las variedades (${response.status})`);
+                }
+
+                const flores = await response.json();
+                lista.replaceChildren();
+
+                if (flores.length === 0) {
+                    mensaje.textContent = 'No hay variedades de flores registradas.';
+                    return;
+                }
+
+                for (const flor of flores) {
+                    const elemento = document.createElement('li');
+                    const nombre = document.createElement('h2');
+                    nombre.textContent = flor.nombre;
+                    elemento.append(nombre);
+
+                    for (const [etiqueta, valor] of [
+                        ['Color', flor.color],
+                        ['Precio por tallo', flor.precio_tallo],
+                        ['Descripción', flor.descripcion_agronomica]
+                    ]) {
+                        const detalle = document.createElement('p');
+                        detalle.textContent = `${etiqueta}: ${valor}`;
+                        elemento.append(detalle);
+                    }
+
+                    lista.append(elemento);
+                }
+
+                mensaje.textContent = '';
+            } catch (error) {
+                console.error('Error al cargar las variedades:', error);
+                mensaje.textContent = 'No se pudieron cargar las variedades. Intenta nuevamente más tarde.';
+            }
+        }
+
+        cargarFlores();
+    </script>
+</body>
+</html>
